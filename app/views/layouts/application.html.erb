@@ -26,6 +26,23 @@
 
   <body>
 
+<nav class="bg-white border-b border-slate-200 px-6 py-3 flex justify-between items-center">
+  <div class="font-bold text-lg text-blue-900">
+    Employees Training LMS
+  </div>
+
+  <div class="flex items-center gap-4">
+    <% if user_signed_in? %>
+      <span class="text-sm text-slate-600">
+        <%= current_user.email %> (<%= current_user.role&.titleize %>)
+      </span>
+      
+      <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "inline-flex items-center px-3 py-1.5 text-xs font-semibold text-rose-600 bg-rose-50 border border-rose-200 rounded-md hover:bg-rose-100 transition-colors" %>
+    <% else %>
+      <%= link_to "Sign In", new_user_session_path, class: "text-sm font-medium text-blue-600 hover:text-blue-800" %>
+    <% end %>
+  </div>
+</nav>
 
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>

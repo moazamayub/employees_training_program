@@ -1,26 +1,38 @@
-<div class="admin-container">
-  <h1>Registered Companies</h1>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="sm:flex sm:items-center sm:justify-between mb-6">
+    <h1 class="text-2xl font-bold tracking-tight text-gray-900">Registered Companies</h1>
+  </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Active Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @companies.each do |company| %>
+  <div class="overflow-x-auto shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+    <table class="min-w-full divide-y divide-gray-300 bg-white">
+      <thead class="bg-gray-50">
         <tr>
-          <td><%= company.id %></td>
-          <td><%= company.name %></td>
-          <td><%= company.is_active? ? "Active" : "Inactive" %></td>
-          <td>
-            <%= link_to "View Details", admin_company_path(company) %>
-          </td>
+          <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">ID</th>
+          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
+          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Active Status</th>
+          <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 text-right text-sm font-semibold text-gray-900">Actions</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% @companies.each do |company| %>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-mono text-gray-500 sm:pl-6">
+              <%= company.id %>
+            </td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-gray-900">
+              <%= company.name %>
+            </td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm">
+              <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset <%= company.is_active? ? 'bg-green-50 text-green-700 ring-green-600/20' : 'bg-red-50 text-red-700 ring-red-600/20' %>">
+                <%= company.is_active? ? "Active" : "Inactive" %>
+              </span>
+            </td>
+            <td class="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+            
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
