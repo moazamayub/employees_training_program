@@ -6,7 +6,10 @@
     "build:css": "npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify"
   },
   "devDependencies": {
-    "esbuild": "^0.28.2"
+    "autoprefixer": "^10.5.4",
+    "esbuild": "^0.28.2",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^4.3.3"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",

@@ -10,6 +10,14 @@ Rails.application.routes.draw do
     resources :companies
   end
 
+ namespace :student do
+    resources :companies
+    resources :courses
+  end
 
+   namespace :teacher do
+    resources :students
+     resources :courses
+  end
 
 end
