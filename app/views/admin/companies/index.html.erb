@@ -1,38 +1,63 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="sm:flex sm:items-center sm:justify-between mb-6">
-    <h1 class="text-2xl font-bold tracking-tight text-gray-900">Registered Companies</h1>
-  </div>
+<div class="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 pb-5 border-b border-blue-100 gap-4">
+      <div>
+        <h1 class="text-3xl font-bold tracking-tight text-blue-950">Company Directory</h1>
+        <p class="mt-1 text-sm text-slate-500">Manage client organizations, subscriptions, and tenancy statuses</p>
+      </div>
+      <div>
+        <%= link_to "+ Add New Company", new_admin_company_path, class: "inline-flex items-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors" %>
+      </div>
+    </div>
 
-  <div class="overflow-x-auto shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-    <table class="min-w-full divide-y divide-gray-300 bg-white">
-      <thead class="bg-gray-50">
-        <tr>
-          <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">ID</th>
-          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
-          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Active Status</th>
-          <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 text-right text-sm font-semibold text-gray-900">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-200">
-        <% @companies.each do |company| %>
-          <tr class="hover:bg-gray-50 transition-colors">
-            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-mono text-gray-500 sm:pl-6">
-              <%= company.id %>
-            </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-gray-900">
-              <%= company.name %>
-            </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm">
-              <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset <%= company.is_active? ? 'bg-green-50 text-green-700 ring-green-600/20' : 'bg-red-50 text-red-700 ring-red-600/20' %>">
-                <%= company.is_active? ? "Active" : "Inactive" %>
-              </span>
-            </td>
-            <td class="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-            
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <% if @companies.any? %>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+            <thead class="bg-slate-50 text-slate-700">
+              <tr>
+                <th class="px-6 py-3.5 font-semibold">ID</th>
+                <th class="px-6 py-3.5 font-semibold">Company Name</th>
+                <th class="px-6 py-3.5 font-semibold">Status</th>
+                <th class="px-6 py-3.5 font-semibold">Registered</th>
+                <th class="px-6 py-3.5 font-semibold text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 bg-white">
+              <% @companies.each do |company| %>
+                <tr class="hover:bg-blue-50/40 transition-colors">
+                  <td class="px-6 py-4 text-slate-500 font-mono text-xs">#<%= company.id %></td>
+                  <td class="px-6 py-4 font-semibold text-slate-900">
+                    <%= link_to company.name, admin_company_path(company), class: "hover:text-blue-600 transition-colors" %>
+                  </td>
+                  <td class="px-6 py-4">
+                    <% if company.is_active? %>
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>
+                    <% else %>
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">Inactive</span>
+                    <% end %>
+                  </td>
+                  <td class="px-6 py-4 text-slate-500"><%= company.created_at.strftime("%b %d, %Y") %></td>
+                  <td class="px-6 py-4 text-right space-x-3 whitespace-nowrap">
+                    <%= link_to "View", admin_company_path(company), class: "text-slate-600 hover:text-blue-600 font-medium" %>
+                    <%= link_to "Edit", edit_admin_company_path(company), class: "text-blue-600 hover:text-blue-800 font-medium" %>
+                    <%= link_to "Delete", admin_company_path(company), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to permanently delete #{company.name}?" }, class: "text-rose-600 hover:text-rose-800 font-medium" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <div class="text-center py-16 bg-white rounded-xl border border-slate-200 shadow-sm">
+        <h3 class="text-base font-semibold text-slate-900">No companies registered</h3>
+        <p class="mt-1 text-sm text-slate-500">Get started by creating your first client organization profile.</p>
+        <div class="mt-6">
+          <%= link_to "Add Company", new_admin_company_path, class: "inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
