@@ -9,7 +9,6 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
@@ -24,30 +23,61 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body>
-
-<nav class="bg-white border-b border-slate-200 px-6 py-3 flex justify-between items-center">
-  <div class="font-bold text-lg text-blue-900">
-    Employees Training LMS
-  </div>
-
-  <div class="flex items-center gap-4">
+  <body class="bg-slate-50 text-slate-900 antialiased min-h-screen">
     <% if user_signed_in? %>
-      <span class="text-sm text-slate-600">
-        <%= current_user.email %> (<%= current_user.role&.titleize %>)
-      </span>
-      
-      <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "inline-flex items-center px-3 py-1.5 text-xs font-semibold text-rose-600 bg-rose-50 border border-rose-200 rounded-md hover:bg-rose-100 transition-colors" %>
+      <div class="flex min-h-screen">
+        <!-- Render Sidebar -->
+        <%= render "shared/sidebar" %>
+
+        <!-- Content Area -->
+        <div class="flex-1 flex flex-col min-w-0">
+          <nav class="bg-white border-b border-slate-200 px-6 py-3 flex justify-between items-center shrink-0">
+          
+            <div class="flex items-center gap-4">
+              <span class="text-sm text-slate-600">
+                <%= current_user.email %> (<%= current_user.role&.titleize %>)
+              </span>
+              
+              
+            </div>
+          </nav>
+
+          <% if notice.present? %>
+            <p class="notice bg-blue-50 border-b border-blue-200 text-blue-800 text-sm px-6 py-2.5"><%= notice %></p>
+          <% end %>
+
+          <% if alert.present? %>
+            <p class="alert bg-rose-50 border-b border-rose-200 text-rose-800 text-sm px-6 py-2.5"><%= alert %></p>
+          <% end %>
+
+          <main class="flex-1 overflow-y-auto p-6">
+            <%= yield %>
+          </main>
+        </div>
+      </div>
     <% else %>
-      <%= link_to "Sign In", new_user_session_path, class: "text-sm font-medium text-blue-600 hover:text-blue-800" %>
+      <!-- Unauthenticated View (Login / Signup Pages) -->
+      <nav class="bg-white border-b border-slate-200 px-6 py-3 flex justify-between items-center">
+        <div class="font-bold text-lg text-blue-900">
+          Employees Training LMS
+        </div>
+
+        <div class="flex items-center gap-4">
+          <%= link_to "Sign In", new_user_session_path, class: "text-sm font-medium text-blue-600 hover:text-blue-800" %>
+        </div>
+      </nav>
+
+      <% if notice.present? %>
+        <p class="notice bg-blue-50 border-b border-blue-200 text-blue-800 text-sm px-6 py-2.5"><%= notice %></p>
+      <% end %>
+
+      <% if alert.present? %>
+        <p class="alert bg-rose-50 border-b border-rose-200 text-rose-800 text-sm px-6 py-2.5"><%= alert %></p>
+      <% end %>
+
+      <main class="p-6">
+        <%= yield %>
+      </main>
     <% end %>
-  </div>
-</nav>
-
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-
-
-    <%= yield %>
   </body>
 </html>

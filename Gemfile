@@ -70,3 +70,5 @@ end
 gem "devise", "~> 5.0"
 
 gem "ruby-lsp-rails", "~> 0.4.8", group: :development
+
+gem "kaminari", "~> 1.2"
