@@ -5,7 +5,9 @@ class Admin::CompaniesController < Admin::AdminController
     before_action :set_company, only: [:show, :edit, :update, :destroy]
 
     def index
-      @companies = Company.all.order(created_at: :desc)
+      
+      @q = Company.ransack(params[:q])
+      @companies = @q.result.order(created_at: :desc).page(params[:page]).per(15)
     end
 
     def show

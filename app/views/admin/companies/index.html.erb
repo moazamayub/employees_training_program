@@ -11,6 +11,21 @@
       </div>
     </div>
 
+    <%= search_form_for @q, url: admin_companies_path, html: { class: "flex flex-wrap items-end gap-3 mb-6" } do |f| %>
+      <div>
+        <%= f.label :name_cont, "Company name", class: "block text-xs font-semibold text-slate-600 mb-1" %>
+        <%= f.search_field :name_cont, placeholder: "Search by name...", class: "border border-slate-300 rounded-lg px-3 py-2 text-sm w-64" %>
+      </div>
+
+      <div>
+        <%= f.label :is_active_eq, "Status", class: "block text-xs font-semibold text-slate-600 mb-1" %>
+        <%= f.select :is_active_eq, [["Active", true], ["Inactive", false]], { include_blank: "All" }, class: "border border-slate-300 rounded-lg px-3 py-2 text-sm" %>
+      </div>
+
+      <%= f.submit "Search", class: "px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700" %>
+      <%= link_to "Reset", admin_companies_path, class: "px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900" %>
+    <% end %>
+
     <% if @companies.any? %>
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
@@ -18,7 +33,7 @@
             <thead class="bg-slate-50 text-slate-700">
               <tr>
                 <th class="px-6 py-3.5 font-semibold">ID</th>
-                <th class="px-6 py-3.5 font-semibold">Company Name</th>
+                <th class="px-6 py-3.5 font-semibold"><%= sort_link(@q, :name, "Company Name") %></th>
                 <th class="px-6 py-3.5 font-semibold">Status</th>
                 <th class="px-6 py-3.5 font-semibold">Registered</th>
                 <th class="px-6 py-3.5 font-semibold text-right">Actions</th>
@@ -49,6 +64,10 @@
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div class="mt-6">
+        <%= paginate @companies %>
       </div>
     <% else %>
       <div class="text-center py-16 bg-white rounded-xl border border-slate-200 shadow-sm">
