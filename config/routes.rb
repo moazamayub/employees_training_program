@@ -7,7 +7,9 @@ Rails.application.routes.draw do
   root "home#index"
 
   namespace :admin do
-    resources :companies
+    resources :companies do
+      resources :users, except: [:show]
+    end
   end
 
  namespace :student do

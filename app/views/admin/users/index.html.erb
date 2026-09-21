@@ -1,0 +1,36 @@
+<div class="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <%= link_to "← Back to #{@company.name}", admin_company_path(@company), class: "text-xs font-semibold text-blue-600 hover:text-blue-800 uppercase tracking-wider" %>
+        <h1 class="text-2xl font-bold text-blue-950 mt-1">Teachers & Students</h1>
+      </div>
+      <%= link_to "+ Add Person", new_admin_company_user_path(@company), class: "inline-flex items-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors" %>
+    </div>
+
+    <% if @users.any? %>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">
+        <% @users.each do |user| %>
+          <div class="p-4 flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-slate-900"><%= [user.first_name, user.last_name].compact.join(" ").presence || user.email %></p>
+              <p class="text-xs text-slate-500"><%= user.email %> &middot; <%= user.role.titleize %></p>
+            </div>
+            <div class="space-x-3">
+              <%= link_to "Edit", edit_admin_company_user_path(@company, user), class: "text-blue-600 hover:text-blue-800 text-sm font-medium" %>
+              <%= link_to "Remove", admin_company_user_path(@company, user), data: { turbo_method: :delete, turbo_confirm: "Remove #{user.email}?" }, class: "text-rose-600 hover:text-rose-800 text-sm font-medium" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-16 bg-white rounded-xl border border-slate-200 shadow-sm">
+        <h3 class="text-base font-semibold text-slate-900">No teachers or students yet</h3>
+        <p class="mt-1 text-sm text-slate-500">Add one to get started.</p>
+        <div class="mt-6">
+          <%= link_to "Add Person", new_admin_company_user_path(@company), class: "inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
