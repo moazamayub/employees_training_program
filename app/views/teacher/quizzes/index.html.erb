@@ -1,0 +1,36 @@
+<div class="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <%= link_to "← Back to #{@course.title}", teacher_course_path(@course), class: "text-xs font-semibold text-blue-600 hover:text-blue-800 uppercase tracking-wider" %>
+        <h1 class="text-2xl font-bold text-blue-950 mt-1">Quizzes</h1>
+      </div>
+      <%= link_to "+ New Quiz", new_teacher_course_quiz_path(@course), class: "inline-flex items-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors" %>
+    </div>
+
+    <% if @quizzes.any? %>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">
+        <% @quizzes.each do |quiz| %>
+          <div class="p-4 flex items-center justify-between">
+            <div>
+              <%= link_to quiz.title, teacher_quiz_path(quiz), class: "text-sm font-semibold text-slate-900 hover:text-blue-600" %>
+              <p class="text-xs text-slate-500"><%= quiz.slides.size %> slide<%= "s" unless quiz.slides.size == 1 %></p>
+            </div>
+            <div class="space-x-3">
+              <%= link_to "Edit", edit_teacher_quiz_path(quiz), class: "text-blue-600 hover:text-blue-800 text-sm font-medium" %>
+              <%= link_to "Delete", teacher_quiz_path(quiz), data: { turbo_method: :delete, turbo_confirm: "Delete #{quiz.title} and all its slides?" }, class: "text-rose-600 hover:text-rose-800 text-sm font-medium" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-16 bg-white rounded-xl border border-slate-200 shadow-sm">
+        <h3 class="text-base font-semibold text-slate-900">No quizzes yet</h3>
+        <p class="mt-1 text-sm text-slate-500">Create your first quiz to start building content.</p>
+        <div class="mt-6">
+          <%= link_to "New Quiz", new_teacher_course_quiz_path(@course), class: "inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

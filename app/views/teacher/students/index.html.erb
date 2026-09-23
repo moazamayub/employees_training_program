@@ -1,121 +1,33 @@
-<div class="teacher-dashboard">
-  <div class="dashboard-header mb-6">
-    <h1>Instructor Course Management</h1>
-    <p class="text-muted">Overview of courses and enrolled employee/student performance</p>
-  </div>
+<div class="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold text-blue-950">Students</h1>
+      <%= link_to "+ New Student", new_teacher_student_path, class: "inline-flex items-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors" %>
+    </div>
 
-  <% if @courses.any? %>
-    <div class="courses-roster-list">
-      <% @courses.each do |course| %>
-        <div class="course-card">
-          <!-- Course Summary Header -->
-          <div class="course-card-header">
+    <% if @students.any? %>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">
+        <% @students.each do |student| %>
+          <div class="p-4 flex items-center justify-between">
             <div>
-              <h3><%= course.title %></h3>
-              <% if course.description.present? %>
-                <p class="text-muted"><%= course.description %></p>
-              <% end %>
+              <%= link_to [student.first_name, student.last_name].compact.join(" ").presence || student.email, teacher_student_path(student), class: "text-sm font-semibold text-slate-900 hover:text-blue-600" %>
+              <p class="text-xs text-slate-500"><%= student.email %> &middot; <%= student.user_courses.size %> course<%= "s" unless student.user_courses.size == 1 %> enrolled</p>
             </div>
-            <div class="course-metrics">
-              <span class="badge badge-info">
-                <%= course.user_courses.size %> Enrolled
-              </span>
-              <% if course.company.present? %>
-                <span class="badge badge-secondary">
-                  <%= course.company.name %>
-                </span>
-              <% end %>
+            <div class="space-x-3">
+              <%= link_to "Edit", edit_teacher_student_path(student), class: "text-blue-600 hover:text-blue-800 text-sm font-medium" %>
+              <%= link_to "Delete", teacher_student_path(student), data: { turbo_method: :delete, turbo_confirm: "Remove #{student.email}?" }, class: "text-rose-600 hover:text-rose-800 text-sm font-medium" %>
             </div>
           </div>
-
-          <!-- Enrolled Students Performance Table -->
-          <div class="student-roster-container">
-            <h4>Enrolled Students</h4>
-
-            <% if course.user_courses.any? %>
-              <table class="table student-table">
-                <thead>
-                  <tr>
-                    <th>Student Name</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th style="width: 25%;">Progress</th>
-                    <th>Score</th>
-                    <th>Enrolled Date</th>
-                    <th>Completed Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% course.user_courses.each do |user_course| %>
-                    <% student = user_course.user %>
-                    <% progress = user_course.progress_percentage || 0 %>
-
-                    <tr>
-                      <!-- User Name -->
-                      <td>
-                        <strong>
-                          <%= [student.first_name, student.last_name].compact.join(" ").presence || "User ##{student.id}" %>
-                        </strong>
-                      </td>
-
-                      <!-- User Email -->
-                      <td><%= student.email %></td>
-
-                      <!-- UserCourse Status -->
-                      <td>
-                        <% status_class = case user_course.status
-                           when "completed" then "badge-success"
-                           when "in_progress" then "badge-info"
-                           when "failed" then "badge-danger"
-                           else "badge-secondary"
-                           end %>
-                        <span class="badge <%= status_class %>">
-                          <%= user_course.status.present? ? user_course.status.to_s.titleize : "Enrolled" %>
-                        </span>
-                      </td>
-
-                      <!-- Progress Percentage -->
-                      <td>
-                        <div class="progress-wrapper">
-                          <div class="progress-bar-container">
-                            <div class="progress-bar" style="width: <%= [progress, 100].min %>%;"></div>
-                          </div>
-                          <span class="progress-text"><%= number_to_percentage(progress, precision: 0) %></span>
-                        </div>
-                      </td>
-
-                      <!-- Score -->
-                      <td>
-                        <% if user_course.score.present? %>
-                          <span class="font-bold"><%= user_course.score %>%</span>
-                        <% else %>
-                          <span class="text-muted">—</span>
-                        <% end %>
-                      </td>
-
-                      <!-- Enrolled At -->
-                      <td>
-                        <%= (user_course.enrolled_at || user_course.created_at).strftime("%b %d, %Y") %>
-                      </td>
-
-                      <!-- Completed At -->
-                      <td>
-                        <%= user_course.completed_at&.strftime("%b %d, %Y") || "—" %>
-                      </td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            <% else %>
-              <p class="text-muted empty-roster">No students enrolled in this course yet.</p>
-            <% end %>
-          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-16 bg-white rounded-xl border border-slate-200 shadow-sm">
+        <h3 class="text-base font-semibold text-slate-900">No students yet</h3>
+        <p class="mt-1 text-sm text-slate-500">Add your first student to get started.</p>
+        <div class="mt-6">
+          <%= link_to "New Student", new_teacher_student_path, class: "inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm" %>
         </div>
-      <% end %>
-    </div>
-  <% else %>
-    <div class="empty-state">
-      <p>No courses found for this account.</p>
-    </div>
-  <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>
