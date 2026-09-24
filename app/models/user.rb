@@ -4,12 +4,12 @@ class User < ApplicationRecord
   devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
 
-
+  belongs_to :company
 
   has_many :user_departments
   has_many :departments, through: :user_departments
 
-  has_many :user_course
+  has_many :user_courses
   has_many :courses, through: :user_courses
   
   has_many :user_quizzes

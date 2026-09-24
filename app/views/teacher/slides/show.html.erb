@@ -1,0 +1,54 @@
+<div class="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <%= link_to "← Back to #{@slide.quiz.title}", teacher_quiz_path(@slide.quiz), class: "text-xs font-semibold text-blue-600 hover:text-blue-800 uppercase tracking-wider" %>
+        <h1 class="text-2xl font-bold text-blue-950 mt-1"><%= @slide.title %></h1>
+        <% if @slide.content.present? %>
+          <p class="text-sm text-slate-500 mt-1 whitespace-pre-line"><%= @slide.content %></p>
+        <% end %>
+      </div>
+      <div class="space-x-3">
+        <%= link_to "Edit", edit_teacher_slide_path(@slide), class: "px-4 py-2 text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors" %>
+        <%= link_to "Delete", teacher_slide_path(@slide), data: { turbo_method: :delete, turbo_confirm: "Delete this slide and its questions?" }, class: "px-4 py-2 text-sm font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg transition-colors" %>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-blue-950">Questions (<%= @slide_questions.count %>)</h3>
+      <%= link_to "+ Add Question", new_teacher_slide_slide_question_path(@slide), class: "px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm" %>
+    </div>
+
+    <% if @slide_questions.any? %>
+      <% @slide_questions.each do |question| %>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <p class="text-sm font-semibold text-slate-900"><%= question.question_text %></p>
+              <p class="text-xs text-slate-500 mt-1"><%= question.question_type.titleize %> &middot; <%= question.points || 0 %> pt<%= "s" unless question.points == 1 %></p>
+            </div>
+            <div class="space-x-3 shrink-0">
+              <%= link_to "Edit", edit_teacher_slide_question_path(question), class: "text-blue-600 hover:text-blue-800 text-xs font-medium" %>
+              <%= link_to "Delete", teacher_slide_question_path(question), data: { turbo_method: :delete, turbo_confirm: "Delete this question?" }, class: "text-rose-600 hover:text-rose-800 text-xs font-medium" %>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <% question.options.each do |option| %>
+              <div class="flex items-center gap-2 text-sm px-3 py-2 rounded-lg <%= option.correct? ? "bg-emerald-50 border border-emerald-200 text-emerald-800" : "bg-slate-50 border border-slate-200 text-slate-700" %>">
+                <% if option.correct? %>
+                  <svg class="h-4 w-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
+                <% end %>
+                <span><%= option.option_text %></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="text-center py-12 bg-white rounded-xl border border-slate-200 shadow-sm">
+        <p class="text-sm text-slate-500">No questions on this slide yet.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

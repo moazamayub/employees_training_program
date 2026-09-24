@@ -19,7 +19,14 @@ Rails.application.routes.draw do
 
    namespace :teacher do
     resources :students
-     resources :courses
+    resources :courses do
+      resources :enrollments, only: [:create, :destroy]
+      resources :quizzes, shallow: true do
+        resources :slides, shallow: true do
+          resources :slide_questions, shallow: true
+        end
+      end
+    end
   end
 
 end
